@@ -1,0 +1,23 @@
+{
+  "name": "claude-news",
+  "version": "1.0.0",
+  "description": "Claude Code & Anthropic 뉴스 자동 수집 및 Slack 발송 시스템",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "send": "npx ts-node src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "keywords": ["claude", "newsletter", "groq", "slack"],
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "groq-sdk": "^0.8.0",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

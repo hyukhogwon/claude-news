@@ -1,0 +1,46 @@
+name: Claude Code Newsletter
+
+on:
+  schedule:
+    # 평일 UTC 00:00 = KST 09:00
+    - cron: '0 0 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      since_hours:
+        description: '수집 기간 (시간)'
+        required: false
+        default: '24'
+      dry_run:
+        description: 'Dry run (Slack 미발송)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  send-newsletter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Send newsletter
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.since_hours }}" != "" ]; then
+            ARGS="$ARGS --since ${{ github.event.inputs.since_hours }}"
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          npm run send -- $ARGS
