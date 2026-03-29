@@ -1,10 +1,13 @@
 export type Category = 'release' | 'blog' | 'community';
 
+export type SourceType = 'rss' | 'reddit_json';
+
 export interface RssSource {
   name: string;
   category: Category;
   url: string;
   maxItems: number;
+  type: SourceType;
 }
 
 export const CATEGORY_EMOJI: Record<Category, string> = {
@@ -19,23 +22,27 @@ export const RSS_SOURCES: RssSource[] = [
     category: 'release',
     url: 'https://github.com/anthropics/claude-code/releases.atom',
     maxItems: 3,
+    type: 'rss',
   },
   {
-    name: 'Anthropic Blog',
+    name: 'Anthropic & Claude News',
     category: 'blog',
-    url: 'https://www.anthropic.com/rss.xml',
+    url: 'https://news.google.com/rss/search?q=anthropic+claude&hl=en&gl=US&ceid=US:en',
     maxItems: 3,
+    type: 'rss',
   },
   {
     name: 'r/ClaudeAI',
     category: 'community',
-    url: 'https://www.reddit.com/r/ClaudeAI/top/.rss?t=day',
+    url: 'https://www.reddit.com/r/ClaudeAI/top.json?t=day&limit=5',
     maxItems: 3,
+    type: 'reddit_json',
   },
   {
     name: 'Hacker News - Claude',
     category: 'community',
     url: 'https://hnrss.org/newest?q=claude+code&points=10',
     maxItems: 3,
+    type: 'rss',
   },
 ];
