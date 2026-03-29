@@ -5,9 +5,13 @@ const MODEL = 'llama-3.1-8b-instant';
 const DELAY_MS = 300;
 
 const SYSTEM_PROMPT = `You are an AI news editor writing for a Korean tech audience.
-Summarize the given article in Korean, in 1-2 concise sentences.
+Your job is to filter and summarize articles about Claude Code, Anthropic, or significant AI industry news.
+
+If the article is NOT relevant (e.g. personal anecdotes, vague opinions, memes, prompt tricks, generic AI complaints), respond with exactly: SKIP
+
+Otherwise, summarize in Korean in 1-2 concise sentences.
 Focus on what changed, what's new, or why it matters.
-Do not include greetings or filler. Output only the summary text.`;
+Do not include greetings or filler. Output only the summary text or SKIP.`;
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -46,6 +50,12 @@ export async function summarizeItems(
       });
 
       const aiSummary = response.choices[0]?.message?.content?.trim();
+
+      if (aiSummary === 'SKIP') {
+        console.log(`   ⏭️  관련 없음 — ${item.title}`);
+        continue;
+      }
+
       summarized.push({
         ...item,
         summary: aiSummary || item.summary,
