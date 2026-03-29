@@ -47,7 +47,10 @@ async function main(): Promise<void> {
   console.log('\n🎉 완료!\n');
 }
 
-main().catch((error) => {
-  console.error('❌ 실행 실패:', error);
-  process.exit(1);
-});
+main().then(
+  () => process.exit(0),
+  (error) => {
+    console.error('❌ 실행 실패:', error);
+    process.exit(1);
+  }
+);
